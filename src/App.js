@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import PostList from './components/PostList'
+import PostCreate from './components/PostCreate'
+import PostCard from './components/PostCard'
+import Page404 from './components/Page404'
+import PostsProvider from './components/PostsProvider';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    /*
+      create post
+      post list
+
+    */
+    <div>
+      <PostsProvider>
+
+        <Router>
+          <Switch>
+            <Route path="/" exact component={PostList} />
+            <Route path="/posts/new" component={PostCreate} />
+            <Route path="/posts/:id([0-9]+)" component={PostCard} />
+            <Route component={Page404} />
+          </Switch>
+        </Router>
+
+      </PostsProvider>
     </div>
+
   );
 }
 
