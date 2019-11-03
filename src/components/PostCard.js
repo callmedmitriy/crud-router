@@ -2,6 +2,9 @@ import React,{useState,useContext} from 'react';
 import PostsContext from '../context/PostsContext';
 import { Redirect } from 'react-router-dom'
 
+import PostShow from './PostShow'
+import PostEdit from './PostEdit'
+
 function findById(posts, id) {
   return posts.find(o => o.id === id);
 }
@@ -10,32 +13,38 @@ function findById(posts, id) {
 export default function PostCard({match}) {
 
   const [redirect,setRedirect] = useState(false)
+  const [edit, setEdit] = useState(false)
 
-  const postsList = useContext(PostsContext)
-  console.log(postsList)
+  const postsList = useContext(PostsContext).cardsList
+  const loading = useContext(PostsContext).loading
+  const reload = useContext(PostsContext).reloader
 
   const idPost = Number(match.params.id)
-  console.log(idPost)
 
-  const post = findById(postsList,idPost)
-  console.log(post)
+  let post
+  if (!loading) {
+    post = findById(postsList,idPost)
+  }
 
-  const deletePost = evt => {
-    evt.preventDefault()
+  const deletePost = id => {
     console.log(`http://localhost:7777/posts/${idPost}`)
     fetch(`http://localhost:7777/posts/${idPost}`, {
       method: 'DELETE',
     })
+    .then(reload())
     .then(setRedirect(true))
+  }
+
+  const editPost = () => {
+    console.log('edit')
+    edit ? setEdit(false) : setEdit(true)
   }
 
   return(
       <div>
         {redirect && <Redirect to='/'/>}
         <h1>PostCard</h1>
-        <span>{post ? post.content : 'Не найден'}</span>
-        <button>Изменить</button>
-        <button onClick={deletePost}>Удалить</button>
+        {edit ? <PostEdit post={post}/> : <PostShow edit={editPost} delete={id => deletePost(id)} post={post}/>}
       </div>
   )
 }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-export default function PostCreate() {
+export default function PostCreate(props) {
 
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState(props.content || '')
 
   const addPost = evt => {
 
