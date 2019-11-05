@@ -1,6 +1,5 @@
 import React, {useState, useContext} from 'react';
 import PostsContext from '../context/PostsContext';
-import { Redirect } from 'react-router-dom'
 
 export default function PostEdit(props) {
 
@@ -10,29 +9,26 @@ export default function PostEdit(props) {
   const reload = useContext(PostsContext).reloader
 
   const changePost = () => {
-    fetch(`http://localhost:7777/posts/${post.id}`, {
-      method: 'DELETE',
-    })
-
     fetch('http://localhost:7777/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        "id": post.id,
         "content": content
       })
     })
     .then(res => console.log(res))
     .then(reload())
-    .then(setRedirect(true))
+    .then(props.edit())
   }
 
   return (
     <>
-        {redirect && <Redirect to='/'/>}
         <input type="text" onChange={(el)=>setContent(el.target.value)} value={content}/>
         <button onClick={changePost}>Сохранить</button>
+        <button onClick={() => props.edit()}>Отменить</button>
     </>
   )
 }

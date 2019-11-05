@@ -44,7 +44,8 @@ export default function PostCard({match}) {
       <div>
         {redirect && <Redirect to='/'/>}
         <h1>PostCard</h1>
-        {edit ? <PostEdit post={post}/> : <PostShow edit={editPost} delete={id => deletePost(id)} post={post}/>}
+        {loading && 'Загрузка'}
+        {edit ? <PostEdit post={post} edit={editPost}/> : <PostShow edit={editPost} delete={id => deletePost(id)} post={post}/>}
       </div>
   )
 }

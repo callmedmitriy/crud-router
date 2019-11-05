@@ -14,6 +14,7 @@ export default function PostCreate(props) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        "id": 0,
         "content": content
       })
     })
